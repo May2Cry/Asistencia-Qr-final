@@ -9,7 +9,7 @@ public class ApiClient {
     public static Retrofit getClient() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("https://zpx7w0r1-7163.brs.devtunnels.ms/api/") // Cambia esta URL a la base de tu API
+                    .baseUrl("https://tesis-qr.azurewebsites.net/api/v1/Servidores/") // Cambia esta URL a la base de tu API
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

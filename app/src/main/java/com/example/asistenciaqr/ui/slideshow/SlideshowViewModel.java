@@ -3,6 +3,8 @@ package com.example.asistenciaqr.ui.slideshow;
 import android.app.Application;
 import android.content.Intent;
 import android.net.Uri;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -34,20 +36,20 @@ public class SlideshowViewModel extends AndroidViewModel {
                 if (response.isSuccessful()) {
                     _personas.setValue(response.body());
                 } else {
-                    // Manejar el caso en que la respuesta no fue exitosa
+                    Toast.makeText(getApplication(), "Ocurrio un error vuelva a ingresar", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Person>> call, Throwable t) {
-                // Manejar el error de la llamada
+                Toast.makeText(getApplication(), "Ocurrio un error vuelva a ingresar", Toast.LENGTH_LONG).show();
             }
         });
     }
     public void onPersonClicked(String codigo) {
 
         String phoneNumber = "+593963759503"; // Número de teléfono de destino
-        String message = "Hola, desea asistencia del técnico " + codigo;
+        String message = "Asistencia Tecnico : " + codigo;
 
         String uri = "https://wa.me/" + phoneNumber + "?text=" + Uri.encode(message);
 
