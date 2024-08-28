@@ -6,11 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import com.example.asistenciaqr.R;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.bumptech.glide.Glide;
 import com.example.asistenciaqr.databinding.FragmentSlideshowBinding;
+import com.example.asistenciaqr.network.Person;
+import com.example.asistenciaqr.network.PersonAdapter;
+
+import java.util.List;
 
 public class SlideshowFragment extends Fragment {
 
@@ -19,14 +24,29 @@ public class SlideshowFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        slideshowViewModel = new ViewModelProvider(this).get(SlideshowViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        slideshowViewModel = new ViewModelProvider(this,
+                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
+                .get(SlideshowViewModel.class);
 
-        // Inflar el layout usando Data Binding
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_slideshow, container, false);
-        binding.setViewModel(slideshowViewModel);
+        binding = FragmentSlideshowBinding.inflate(inflater, container, false);
         binding.setLifecycleOwner(this);
+
+        setupRecyclerView();
 
         return binding.getRoot();
     }
+
+    private void setupRecyclerView() {
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        slideshowViewModel.personas.observe(getViewLifecycleOwner(), personas -> {
+            if (personas != null && !personas.isEmpty()) {
+                PersonAdapter adapter = new PersonAdapter(personas, slideshowViewModel);
+                binding.recyclerView.setAdapter(adapter);
+            }
+        });
+    }
+
+
 }

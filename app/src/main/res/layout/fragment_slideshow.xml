@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.slideshow.SlideshowFragment">
 
@@ -16,115 +14,11 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Persona 1 -->
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:onClick="@{() -> viewModel.onPersonClicked(1)}">
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_person" />
 
-            <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@drawable/person1" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Persona 1"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <ProgressBar
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:max="100"
-                    android:progress="70"
-                    android:indeterminate="false"
-                    style="@android:style/Widget.ProgressBar.Horizontal" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Persona 2 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:onClick="@{() -> viewModel.onPersonClicked(2)}">
-
-            <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@drawable/person2" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Persona 2"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <ProgressBar
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:max="100"
-                    android:progress="50"
-                    android:indeterminate="false"
-                    style="@android:style/Widget.ProgressBar.Horizontal" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Persona 3 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:onClick="@{() -> viewModel.onPersonClicked(3)}">
-
-            <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@drawable/person3" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Persona 3"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <ProgressBar
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:max="100"
-                    android:progress="30"
-                    android:indeterminate="false"
-                    style="@android:style/Widget.ProgressBar.Horizontal" />
-            </LinearLayout>
-        </LinearLayout>
     </LinearLayout>
 </layout>
