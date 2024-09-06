@@ -21,11 +21,21 @@ public class SlideshowViewModel extends AndroidViewModel {
     private MutableLiveData<List<Person>> _personas = new MutableLiveData<>();
     public LiveData<List<Person>> personas = _personas;
 
+    // LiveData para el dato compartido desde GalleryFragment
+    private MutableLiveData<String> _sharedData = new MutableLiveData<>();
+    public LiveData<String> getSharedData() {
+        return _sharedData;
+    }
+
     public SlideshowViewModel(@NonNull Application application) {
         super(application);
         fetchPersonData();
     }
 
+    // Método para actualizar el dato compartido
+    public void setSharedData(String data) {
+        _sharedData.setValue(data);
+    }
 
     private void fetchPersonData() {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
@@ -49,7 +59,7 @@ public class SlideshowViewModel extends AndroidViewModel {
     public void onPersonClicked(String codigo) {
 
         String phoneNumber = "+593963759503"; // Número de teléfono de destino
-        String message = "Asistencia Tecnico : " + codigo;
+        String message = "Asistencia Tecnico : " + codigo +"__"+_sharedData.getValue();
 
         String uri = "https://wa.me/" + phoneNumber + "?text=" + Uri.encode(message);
 

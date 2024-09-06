@@ -1,9 +1,12 @@
 package com.example.asistenciaqr.ui.slideshow;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -25,12 +28,22 @@ public class SlideshowFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
-                .get(SlideshowViewModel.class);
+        // Inicializar el ViewModel compartido usando el ámbito de la actividad
+        slideshowViewModel = new ViewModelProvider(requireActivity()).get(SlideshowViewModel.class);
 
         binding = FragmentSlideshowBinding.inflate(inflater, container, false);
         binding.setLifecycleOwner(this);
+
+        // Observar los datos compartidos
+        slideshowViewModel.getSharedData().observe(getViewLifecycleOwner(), sharedData -> {
+            if (sharedData != null) {
+                // Mostrar el dato en un TextView o realizar alguna acción
+                binding.textViewTipoEquip.setText("Tipo de equipo: " + sharedData);
+            } else {
+                // Manejar el caso donde no se recibe el dato
+                Toast.makeText(getContext(), "No se recibió el dato del tipo de equipo", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         setupRecyclerView();
 

@@ -18,6 +18,7 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import com.example.asistenciaqr.R;
 import com.example.asistenciaqr.databinding.FragmentGalleryBinding;
+import com.example.asistenciaqr.ui.slideshow.SlideshowViewModel;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,10 +35,13 @@ public class GalleryFragment extends Fragment {
     private static final int TIMEOUT_DURATION = 30000; // 30 seconds
     private GalleryViewModel galleryViewModel;
     private FragmentGalleryBinding binding;
+    private SlideshowViewModel slideshowViewModel; // ViewModel compartido
     private Handler handler;
     private Runnable timeoutRunnable;
-    private ProgressBar progressBar;
 
+    private ProgressBar progressBar;
+    public String directDownloadUrl=null;
+    private String TipoEquip=null;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         galleryViewModel = new ViewModelProvider(this).get(GalleryViewModel.class);
@@ -46,17 +50,11 @@ public class GalleryFragment extends Fragment {
         View root = binding.getRoot();
 
         progressBar = binding.progressBar;
+        // Obtener el ViewModel compartido de Slideshow
+        slideshowViewModel = new ViewModelProvider(requireActivity()).get(SlideshowViewModel.class);
 
-        // Configurar el FloatingActionButton
-        FloatingActionButton fab = root.findViewById(R.id.fab);
-        fab.setVisibility(View.VISIBLE); // Asegúrate de que el botón es visible
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavController navController = Navigation.findNavController(view);
-                navController.navigate(R.id.action_nav_gallery_to_nav_slideshow);
-            }
-        });
+
+
 
         // Cargar el PDF
         loadPdf();
@@ -69,9 +67,19 @@ public class GalleryFragment extends Fragment {
         if (bundle != null) {
             String scannedUrl = bundle.getString("scannedUrl");
             if (scannedUrl != null) {
-                // Convertir el enlace de Google Drive a un enlace directo de descarga
-                String fileId = scannedUrl.split("/d/")[1].split("/")[0];
-                String directDownloadUrl = "https://drive.google.com/uc?export=download&id=" + fileId;
+                if(scannedUrl.contains("google")){
+                    // Convertir el enlace de Google Drive a un enlace directo de descarga
+                    String fileId = scannedUrl.split("/d/")[1].split("/")[0];
+                     directDownloadUrl = "https://drive.google.com/uc?export=download&id=" + fileId;
+                } else if (scannedUrl.contains("gealpina20")) {
+                     directDownloadUrl = scannedUrl;
+                }
+
+                if(directDownloadUrl.contains("Bomba")){
+                    TipoEquip="Bomba Mindray vp5";
+                } else if (directDownloadUrl.contains("Monitor")) {
+                    TipoEquip="Monitor Biolight Q5";
+                }
                 Log.d(TAG, "Direct Download URL: " + directDownloadUrl);
 
                 // Mostrar el ProgressBar
@@ -101,6 +109,7 @@ public class GalleryFragment extends Fragment {
             Log.e(TAG, "Bundle is null");
             Toast.makeText(getContext(), "Failed to get arguments", Toast.LENGTH_SHORT).show();
         }
+        slideshowViewModel.setSharedData(TipoEquip);
     }
 
     private class DownloadPdfTask extends AsyncTask<String, Void, File> {
