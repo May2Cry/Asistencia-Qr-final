@@ -71,7 +71,7 @@ public class GalleryFragment extends Fragment {
                     // Convertir el enlace de Google Drive a un enlace directo de descarga
                     String fileId = scannedUrl.split("/d/")[1].split("/")[0];
                      directDownloadUrl = "https://drive.google.com/uc?export=download&id=" + fileId;
-                } else if (scannedUrl.contains("gealpina20")) {
+                } else {
                      directDownloadUrl = scannedUrl;
                 }
 
