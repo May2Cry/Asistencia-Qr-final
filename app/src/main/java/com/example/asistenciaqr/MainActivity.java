@@ -1,12 +1,17 @@
 package com.example.asistenciaqr;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -29,11 +34,42 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        NavigationView navigationView = binding.navView;
+        //NavigationView navigationView = findViewById(R.id.nav_view);
+
+
+        View headerView = navigationView.getHeaderView(0);
+
+
+        TextView textView = headerView.findViewById(R.id.textView);
+        String email = getString(R.string.nav_header_subtitle);
+
+        // Si el TextView es válido, configurar el clic para enviar el correo
+        if (textView != null) {
+
+
+            textView.setOnClickListener(view -> {
+                // Crear un intent para enviar un correo con ACTION_SEND
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");  // Tipo MIME del contenido del correo
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});  // Dirección de correo
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Soporte Tecnico");  // Asunto del correo
+
+                // Verificar que haya una aplicación de correo disponible
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(Intent.createChooser(intent, "Enviar correo..."));
+                } else {
+                    Toast.makeText(this, "No hay aplicaciones de correo instaladas", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(this, "No se encontró el TextView", Toast.LENGTH_LONG).show();
+        }
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
         DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+       // NavigationView navigationView = binding.navView;
         FloatingActionButton fab = binding.appBarMain.fab;
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
